@@ -1,0 +1,14 @@
+{
+  "name": "bookapi",
+  "version": "1.0.0",
+  "description": "initialising npm on the folder",
+  "main": "bookAPI.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Olibie Chidera",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

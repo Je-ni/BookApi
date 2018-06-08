@@ -6,7 +6,7 @@ app.listen(3000, function(){
 
 var lib = new Library('Lib');
 
-app.get('/api/books', function(request, response){
+app.get('/api/addBook', function(request, response){
     query = request.query;
     var book = new Book(query.name, query.author, query.year, Math.random());
     lib.addBook(book);
@@ -38,7 +38,7 @@ function Library(name) {
     // })
 }
 Library.prototype.getLibrary = function () {
-    return JSON.parse(fs.readFileSync('./books.json'));
+    return JSON.parse(fs.readFileSync('./books.json', 'utf-8'));
 }
 
 Library.prototype.updateLibrary = function () {

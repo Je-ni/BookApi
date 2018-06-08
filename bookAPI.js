@@ -1,17 +1,18 @@
 var app = require('express')();
-
+var bodyParser = require('body-parser');
 app.listen(3000, function(){
     console.log('server is listening on port 3000');
 });
 
 var lib = new Library('Lib');
-
-app.post('/api/book', function(request, response){
-    let params = request.query;
+app.use(bodyParser.json());
+app.post('/api/addBook', function(request, response){
+    let params = request.body;
     let book = new Book(params.name, params.author, params.year, Math.random());
     lib.addBook(book);
     response.send(lib.getBooks());
 })
+
 
 app.get('/', function(request, response){
     response.send(lib.getBooks());

@@ -6,6 +6,13 @@ app.listen(3000, function(){
 
 var lib = new Library('Lib');
 
+app.get('/api/books', function(request, response){
+    query = request.query;
+    var book = new Book(query.name, query.author, query.year, Math.random());
+    lib.addBook(book);
+    lib.updateLibrary();
+})
+
 app.get('/', function (request, response) {
     response.send(lib.getBooks());
 })
@@ -95,13 +102,13 @@ Library.prototype.getBooksByParam = function (param, value) {
     return books;
 }
 
-var book1 = new Book('The Girl', 'Chidera', 2016, 1);
-var book2 = new Book('The Boy', 'Jeni', 2018, 2);
-var book3 = new Book('The Lovers', 'Olibie', 2018, 3);
+// var book1 = new Book('The Girl', 'Chidera', 2016, 1);
+// var book2 = new Book('The Boy', 'Jeni', 2018, 2);
+// var book3 = new Book('The Lovers', 'Olibie', 2018, 3);
 
-lib.addBook(book1);
-lib.addBook(book2);
-lib.addBook(book3);
+// lib.addBook(book1);
+// lib.addBook(book2);
+// lib.addBook(book3);
 
 // console.log(lib.getBooks());
 // console.log(lib);

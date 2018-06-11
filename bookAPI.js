@@ -5,18 +5,27 @@ app.listen(3000, function(){
 });
 
 var lib = new Library('Lib');
-app.use(bodyParser.json());
-app.post('/api/addBook', function(request, response){
-    let params = request.body;
-    let book = new Book(params.name, params.author, params.year, Math.random());
-    lib.addBook(book);
-    response.send(lib.getBooks());
-})
 
+app.use(bodyParser.json());
 
 app.get('/', function(request, response){
     response.send(lib.getBooks());
 })
+
+app.post('/api/addBook', function(request, response){
+    let body = request.body;
+    let book = new Book(body.name, body.author, body.year, Math.random());
+    lib.addBook(book);
+    response.send(lib.getBooks());
+})
+
+app.put('/api/updateBook', function(request, response){
+    let id = request.query.id;
+    let body = request.body;
+    lib.updateBook(id, new Book(body.name, body.author, body.year, id));
+    response.send(lib.getBooks());
+})
+
 
 var fs = require('fs');
 
@@ -47,6 +56,7 @@ Library.prototype.updateLibrary = function(){
 }
 
 Library.prototype.addBook = function(book){
+    this.books = this.getBooks();
     this.books.push(book);
     this.updateLibrary();
 }
@@ -59,7 +69,7 @@ Library.prototype.getBookById = function(id){
     // var book = this.books.filter(book => book.id == id);
     this.books = this.getLibrary();
     for (let i = 0; i < this.books.length; i++){
-        if(this.books[i].id === id){
+        if(this.books[i].id == id){
             return this.books[i];
             }
     }
@@ -70,7 +80,7 @@ Library.prototype.getBookById = function(id){
 Library.prototype.getBookIndex = function(id){
     this.books = this.getLibrary();
     for (let i = 0; i < this.books.length; i++){
-        if(this.books[i].id === id){
+        if(this.books[i].id == id){
             return i;
             }
     }
@@ -89,6 +99,7 @@ Library.prototype.deleteBook = function(id){
 Library.prototype.updateBook = function(id, updatedBook){
     let bookIndex = this.getBookIndex(id);
     this.books[bookIndex] = updatedBook;
+    console.log(this.books);
     this.updateLibrary(this.books);
 }
 

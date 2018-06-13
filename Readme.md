@@ -1,5 +1,5 @@
 # Book API
-This is my first API using ExpressNodeJs built during my internship program at genesystechhub[www.genesystechhub.com]
+This is my first API using ExpressNodeJs built during my internship program at [genesystechhub](www.genesystechhub.com)
 
 # Details
 This is the basic structure of an API that allows you to perform the basic functions of a library.
@@ -10,4 +10,4 @@ You can run this on your local server using the port 3000 or you can change the 
 ## Testing
 I tested this API using Google's Advanced Rest Client
 ## Tutor
-Mr Harrison Favour[favour.harrison@tenece.com]
+Mr [Harrison Favour](favour.harrison@tenece.com), click on his name to email.

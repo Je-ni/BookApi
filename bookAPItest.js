@@ -1,4 +1,5 @@
 var app = require('express')();
+var bodyParser = require('body-parser');
 
 app.listen(3000, function(){
     console.log('server is listening on port 3000');
@@ -6,17 +7,41 @@ app.listen(3000, function(){
 
 var lib = new Library('Lib');
 
-app.get('/api/addBook', function(request, response){
-    query = request.query;
-    var book = new Book(query.name, query.author, query.year, Math.random());
+app.use(bodyParser.json());
+
+app.post('/api/addBook', function(request, response){
+    let body = request.body;
+    let book = new Book(body.name, body.author, body.year, Math.random());
     lib.addBook(book);
-    lib.updateLibrary();
+    response.send(lib.getBooks());
 })
 
 app.get('/', function (request, response) {
     response.send(lib.getBooks());
 })
 
+app.put('/api/updateBook', function(request, response){
+    let id = request.query.id;
+    let body = request.body;
+    lib.updateBook(id, new Book(body.name, body.author, body.year, id));
+    response.send(lib.getBooks());
+})
+
+app.get('/api/getBookById', function(request, response){
+    let id = request.query.id;
+    response.send(lib.getBookById(id));
+})
+
+app.delete('/api/deleteBook', function(request, response){
+    let id = request.query.id;
+    response.send(lib.deleteBook(id));
+})
+
+app.get('/api/getBookByParam', function(request, response){
+    let param = request.query.value;
+    response.send(lib.getBooksByParam(param));
+
+})
 var fs = require('fs');
 
 function Book(title, author, year, id) {
@@ -95,12 +120,29 @@ Library.prototype.getBooksByParam = function (param, value) {
     this.books = this.getLibrary();
     var books = [];
     for (let i = 0; i < this.books.length; i++) {
-        if (this.books[i][param] === value) {
+        if(this.books[i].title == value || this.books[i].author == value ||
+            this.books[i].year == value || this.books[i].id == value ){
             books.push(this.books[i]);
         }
+        // if (this.books[i][param] === value) {
+        //     books.push(this.books[i]);
+        // }
     }
     return books;
 }
+
+// Library.prototype.getParam = function(param, value){
+//     this.books = this.getLibrary();
+//     if (param == 'title'){
+//         return 'title';
+//     }else if (param == 'author'){
+//         return 'author';
+//     }else if (param == 'year'){
+//         return 'year'
+//     }else {
+//         return 'id'
+//     };
+// }
 
 // var book1 = new Book('The Girl', 'Chidera', 2016, 1);
 // var book2 = new Book('The Boy', 'Jeni', 2018, 2);

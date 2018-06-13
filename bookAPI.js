@@ -1,13 +1,21 @@
+/** BUILDING A BOOK API WITH EXPRESSJS */
+
+//importing the express, body-parser and file-systems(fs) files and assigning it a variable
 var app = require('express')();
 var bodyParser = require('body-parser');
+var fs = require('fs');
+
+//starting the server on port 3000
 app.listen(3000, function(){
     console.log('server is listening on port 3000');
 });
 
 var lib = new Library('Lib');
 
+//calling bodyParser and making it a middleware(saying it must be used)
 app.use(bodyParser.json());
 
+//using my various express methods and callback functions
 app.get('/', function(request, response){
     response.send(lib.getBooks());
 })
@@ -26,9 +34,22 @@ app.put('/api/updateBook', function(request, response){
     response.send(lib.getBooks());
 })
 
+app.get('/api/getBookById', function(request, response){
+    let id = request.query.id;
+    response.send(lib.getBookById(id));
+})
 
-var fs = require('fs');
+app.delete('/api/deleteBook', function(request, response){
+    let id = request.query.id;
+    response.send(lib.deleteBook(id));
+})
 
+app.get('/api/getBookByParam', function(request, response){
+    let param = request.query.value;
+    response.send(lib.getBooksByParam(param));
+})
+
+//creating the Library architecture
 function Book(title, author, year, id){
     this.title = title;
     this.author = author;
@@ -39,14 +60,9 @@ function Book(title, author, year, id){
 function Library(name){
     this.name = name;
     this.books = [];
-    // this.books = fs.readFileSync('./books.json', 'utf-8');
-    // Object.defineProperty(this, 'books', {
-    //     value: [],
-    //     enumerable: false,
-    //     configurable: true,
-    //     writable: true
-    // })
 }
+
+//creating the library methods using JSON
 Library.prototype.getLibrary = function(){
     return JSON.parse(fs.readFileSync('./books.json'));
 }
@@ -55,38 +71,42 @@ Library.prototype.updateLibrary = function(){
     return fs.writeFileSync('./books.json', JSON.stringify(this.books));
 }
 
+//this adds book to the library
 Library.prototype.addBook = function(book){
     this.books = this.getBooks();
     this.books.push(book);
     this.updateLibrary();
 }
 
+//this gets all the books
 Library.prototype.getBooks = function(){
     this.books = this.getLibrary();
-    return this.books; 
+    return this.books;
+}
 
+//allows user to fetch book using id
 Library.prototype.getBookById = function(id){
-    // var book = this.books.filter(book => book.id == id);
     this.books = this.getLibrary();
     for (let i = 0; i < this.books.length; i++){
         if(this.books[i].id == id){
             return this.books[i];
             }
     }
-            return `Book with id: ${id} not found.`;
-        }
-    }
+    return `Book with id: ${id} not found.`;
+}
 
+//gets the index of the book in the books array
 Library.prototype.getBookIndex = function(id){
     this.books = this.getLibrary();
     for (let i = 0; i < this.books.length; i++){
         if(this.books[i].id == id){
             return i;
-            }
-    }
-            return `Book with id: ${id} not found.`;
         }
+    }
+    return `Book with id: ${id} not found.`;
+}
 
+//allows user to delete book using id
 Library.prototype.deleteBook = function(id){
     let bookIndex = this.getBookIndex(id);
     var message = "You just deleted the book, '" + this.books[bookIndex].title +
@@ -96,35 +116,22 @@ Library.prototype.deleteBook = function(id){
     return message;
 }
 
+//allows user to update book using the id
 Library.prototype.updateBook = function(id, updatedBook){
     let bookIndex = this.getBookIndex(id);
     this.books[bookIndex] = updatedBook;
-    console.log(this.books);
     this.updateLibrary(this.books);
 }
 
-Library.prototype.getBooksByParam = function(param, value){
+//allows user to sear by any value and checks if it matches any of the book parameters in the library
+Library.prototype.getBooksByParam = function(value){
     this.books = this.getLibrary();
     var books = [];
     for (let i = 0; i < this.books.length; i++){
-        if(this.books[i][param] === value){
+        if(this.books[i].title == value || this.books[i].author == value ||
+            this.books[i].year == value || this.books[i].id == value ){
             books.push(this.books[i]);
         }
     }
     return books;
 }
-
-// var book1 = new Book('The Girl', 'Chidera', 2016, 1);
-// var book2 = new Book('The Boy', 'Jeni', 2018, 2);
-// var book3 = new Book('The Lovers', 'Olibie', 2018, 3);
-
-
-// console.log(lib.getBooks());
-// console.log(lib);
-// console.log(lib.getBookById(2));
-// console.log(lib.getBookIndex(2));
-// console.log(lib.getBooksByParam('year', 2018));
-// console.log(lib.deleteBook(1));
-// console.log(lib.books);
-
-

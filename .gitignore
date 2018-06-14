@@ -36,3 +36,6 @@ Thumbs.db
 
 # node modules #
 node_modules/
+
+# all test files #
+*test.*

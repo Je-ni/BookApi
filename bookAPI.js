@@ -54,6 +54,11 @@ app.get('/api/borrowBook', function(request, response){
     response.send(lib.borrowBook(id));
 })
 
+app.get('/api/returnBook', function(request, response){
+    let id = request.query.id;
+    response.send(lib.returnBook(id));
+})
+
 //creating the Library architecture
 function Book(title, author, year, id){
     this.title = title;
@@ -149,8 +154,8 @@ Library.prototype.borrowBook = function(id){
     this.borrowedBooks.push(book);
     fs.writeFileSync('./borrowedBooks.json', JSON.stringify(this.borrowedBooks));
 
-    var output = `You just borrowed ${book.title} by ${book.author} (${book.year}). 
-                    Please return on/before the specified date.`
+    var output = `You just borrowed ${book.title} by ${book.author} (${book.year}).
+    Please return on/before the specified date.`
     //to remove the book from the books library
     this.deleteBook(id);
     return output;
@@ -165,9 +170,14 @@ Library.prototype.returnBook = function(id){
             var bookIndex = i;
         }
     }
+
+    //adds book back to the library
     this.addBook(book);
+
+    //removes book from the borrowed books array
     this.borrowedBooks.splice(bookIndex, 1);
     fs.writeFileSync('./borrowedBooks.json', JSON.stringify(this.borrowedBooks));
+
     var message = `You just returned ${book.title} by ${book.author} (${book.year}).`;
     return message;
 }

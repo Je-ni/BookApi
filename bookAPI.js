@@ -22,7 +22,7 @@ app.get('/', function(request, response){
 
 app.post('/api/addBook', function(request, response){
     let body = request.body;
-    let book = new Book(body.name, body.author, body.year, Math.random());
+    let book = new Book(body.title, body.author, body.year, Math.random());
     lib.addBook(book);
     response.send(lib.getBooks());
 })
@@ -30,7 +30,7 @@ app.post('/api/addBook', function(request, response){
 app.put('/api/updateBook', function(request, response){
     let id = request.query.id;
     let body = request.body;
-    lib.updateBook(id, new Book(body.name, body.author, body.year, id));
+    lib.updateBook(id, new Book(body.title, body.author, body.year, id));
     response.send(lib.getBooks());
 })
 
@@ -47,6 +47,11 @@ app.delete('/api/deleteBook', function(request, response){
 app.get('/api/getBookByParam', function(request, response){
     let param = request.query.value;
     response.send(lib.getBooksByParam(param));
+})
+
+app.get('/api/borrowBook', function(request, response){
+    let id = request.query.id;
+    response.send(lib.borrowBook(id));
 })
 
 //creating the Library architecture
@@ -134,4 +139,17 @@ Library.prototype.getBooksByParam = function(value){
         }
     }
     return books;
+}
+
+//allows user to borrow book by id
+Library.prototype.borrowBook = function(id){
+    //to put the book in a borrowedBooks database
+    var book =  this.getBookById(id);
+    fs.writeFileSync('./borrowedBooks.json', JSON.stringify(book));
+
+    var output = `You just borrowed ${book.title} by ${book.author} (${book.year}). 
+                    Please return on/before the specified date.`
+    //to remove the book from the books library
+    this.deleteBook(id);
+    return output;
 }

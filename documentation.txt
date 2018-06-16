@@ -1,0 +1,53 @@
+I tested the API using Advanced Rest Client.
+The book API performs the following functions:
+
+1. list the existing books in the library: 
+        test this by running the URL: http://localhost:3000/
+        using the GET method
+
+2. adds a book to the library:
+        test this using the URL: http://localhost:3000/api/addBook
+        using the POST method
+        This uses the request.body system and thus, you have to specify the following properties:
+        title, author and year.
+        It randomly generates a unique id for the book.
+
+3. updates an exisiting book:
+        test this using the URL: http://localhost:3000/api/updateBook?id=pastebookidhere
+        using the PUT method.
+        You have to specify the id of the book you wish to update in the query as shown above.
+        This also uses the request.body system and thus you also have to specify
+        the new title and/or new year and/or new author.
+        It can also be seen as replace book.
+
+4. get book by id:
+        test this using the URL: http://localhost:3000/api/getBookById?id=pastebookidhere
+        using the GET method.
+        You have to specify the id of the book you wish to view in the query as shown above.
+
+5. delete a book:
+        test this using the URL: http://localhost:3000/api/deleteBook?id=pastebookidhere
+        using the DELETE method.
+        You have to specify the id of the book you wish to delete in the query as shown above.
+
+6. get book using any of value like its title, author or year:
+        test this using the URL: http://localhost:3000/api/getBookByParam?value=pastebookparametervaluehere
+        using the GET method.
+        You have to specify the title or year or author of the book you wish to find in the query as shown above.
+        Ensure that the query key name is value.
+        It can also be seen as SEARCH function.
+
+7. borrow a book:
+        test this using the URL: http://localhost:3000/api/borrowBook?id=pastebookidhere
+        using the GET method.
+        You have to specify the id of the book you wish to borrow in the query as shown above.
+        This removes a book from the library books and adds it to the borrowed books.
+
+8. return borrowed book:
+        test this using the URL: http://localhost:3000/api/returnBook?id=pastebookidhere
+        using the GET method.
+        You have to specify the id of the book you wish to borrow in the query as shown above.
+        This removes a book from the library borrowed books and returns it to the library books.
+
+
+

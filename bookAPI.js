@@ -65,6 +65,7 @@ function Book(title, author, year, id){
 function Library(name){
     this.name = name;
     this.books = [];
+    this.borrowedBooks = [];
 }
 
 //creating the library methods using JSON
@@ -145,11 +146,28 @@ Library.prototype.getBooksByParam = function(value){
 Library.prototype.borrowBook = function(id){
     //to put the book in a borrowedBooks database
     var book =  this.getBookById(id);
-    fs.writeFileSync('./borrowedBooks.json', JSON.stringify(book));
+    this.borrowedBooks.push(book);
+    fs.writeFileSync('./borrowedBooks.json', JSON.stringify(this.borrowedBooks));
 
     var output = `You just borrowed ${book.title} by ${book.author} (${book.year}). 
                     Please return on/before the specified date.`
     //to remove the book from the books library
     this.deleteBook(id);
     return output;
+}
+
+//allows user to return book borrowed
+Library.prototype.returnBook = function(id){
+    this.borrowedBooks = JSON.parse(fs.readFileSync('./borrowedBooks.json'));
+    for (let i = 0; i < this.borrowedBooks.length; i++){
+        if(this.borrowedBooks[i].id == id){
+            var book = this.borrowedBooks[i];
+            var bookIndex = i;
+        }
+    }
+    this.addBook(book);
+    this.borrowedBooks.splice(bookIndex, 1);
+    fs.writeFileSync('./borrowedBooks.json', JSON.stringify(this.borrowedBooks));
+    var message = `You just returned ${book.title} by ${book.author} (${book.year}).`;
+    return message;
 }

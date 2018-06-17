@@ -124,18 +124,24 @@ Library.prototype.getBookIndex = function(id){
 //allows user to delete book using id
 Library.prototype.deleteBook = function(id){
     let bookIndex = this.getBookIndex(id);
-    var message = "You just deleted the book, '" + this.books[bookIndex].title +
-                  " by " + this.books[bookIndex].author +"("+this.books[bookIndex].year + ")'."; 
-    this.books.splice(bookIndex, 1);
-    this.updateLibrary(this.books);
-    return message;
+    if (bookIndex == null || bookIndex == undefined) return 'Book not found';
+    else {
+        var message = "You just deleted the book, '" + this.books[bookIndex].title +
+        " by " + this.books[bookIndex].author +"("+this.books[bookIndex].year + ")'."; 
+        this.books.splice(bookIndex, 1);
+        this.updateLibrary(this.books);
+        return message;
+    }
 }
 
 //allows user to update book using the id
 Library.prototype.updateBook = function(id, updatedBook){
     let bookIndex = this.getBookIndex(id);
-    this.books[bookIndex] = updatedBook;
-    this.updateLibrary(this.books);
+    if (bookIndex == null || bookIndex == undefined) return 'Book cannot be updated';
+    else {
+        this.books[bookIndex] = updatedBook;
+        this.updateLibrary(this.books);
+    }
 }
 
 //allows user to sear by any value and checks if it matches any of the book parameters in the library
@@ -148,7 +154,8 @@ Library.prototype.getBooksByParam = function(value){
             books.push(this.books[i]);
         }
     }
-    return books;
+    if (books.length < 1) return 'Book Not Found.';
+    else return books;
 }
 
 //allows user to borrow book by id

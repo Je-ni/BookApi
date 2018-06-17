@@ -189,5 +189,6 @@ Library.prototype.returnBook = function(id){
 //to see borrowed books
 Library.prototype.viewBorrowedBooks = function(){
     this.borrowedBooks = JSON.parse(fs.readFileSync('./borrowedBooks.json'));
-    return this.borrowedBooks;
+    if (this.borrowedBooks == []) return 'No books have been borrowed';
+    else return this.borrowedBooks;
 }

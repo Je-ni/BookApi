@@ -12,7 +12,7 @@ The book API performs the following functions:
         title, author and year.
         It randomly generates a unique id for the book.
 
-3. updates an exisiting book:
+3. updates an existing book:
         test this using the URL: http://localhost:3000/api/updateBook?id=pastebookidhere
         using the PUT method.
         You have to specify the id of the book you wish to update in the query as shown above.
@@ -48,6 +48,12 @@ The book API performs the following functions:
         using the GET method.
         You have to specify the id of the book you wish to borrow in the query as shown above.
         This removes a book from the library borrowed books and returns it to the library books.
+
+9. to see borrowed books:
+        test this using the URL: http://localhost:3000/api/viewBorrowedBooks
+        using the GET method.
+        This brings out a list of all the books that are currently borrowed.
+        
 
 
 

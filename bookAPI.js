@@ -59,6 +59,10 @@ app.get('/api/returnBook', function(request, response){
     response.send(lib.returnBook(id));
 })
 
+app.get('/api/viewBorrowedBooks', function(request, response){
+    response.send(lib.viewBorrowedBooks());
+})
+
 //creating the Library architecture
 function Book(title, author, year, id){
     this.title = title;
@@ -180,4 +184,10 @@ Library.prototype.returnBook = function(id){
 
     var message = `You just returned ${book.title} by ${book.author} (${book.year}).`;
     return message;
+}
+
+//to see borrowed books
+Library.prototype.viewBorrowedBooks = function(){
+    this.borrowedBooks = JSON.parse(fs.readFileSync('./borrowedBooks.json'));
+    return this.borrowedBooks;
 }

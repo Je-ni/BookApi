@@ -159,7 +159,7 @@ Library.prototype.borrowBook = function(id){
     fs.writeFileSync('./borrowedBooks.json', JSON.stringify(this.borrowedBooks));
 
     var output = `You just borrowed ${book.title} by ${book.author} (${book.year}).
-    Please return on/before the specified date.`
+Please return on/before the specified date.`
     //to remove the book from the books library
     this.deleteBook(id);
     return output;
@@ -189,6 +189,6 @@ Library.prototype.returnBook = function(id){
 //to see borrowed books
 Library.prototype.viewBorrowedBooks = function(){
     this.borrowedBooks = JSON.parse(fs.readFileSync('./borrowedBooks.json'));
-    if (this.borrowedBooks == []) return 'No books have been borrowed';
+    if (this.borrowedBooks.length < 1) return 'No books have been borrowed';
     else return this.borrowedBooks;
 }

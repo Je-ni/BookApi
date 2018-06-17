@@ -124,7 +124,7 @@ Library.prototype.getBookIndex = function(id){
 //allows user to delete book using id
 Library.prototype.deleteBook = function(id){
     let bookIndex = this.getBookIndex(id);
-    if (bookIndex == null || bookIndex == undefined) return 'Book not found';
+    if (isNaN(bookIndex)) return 'Book Not Found';
     else {
         var message = "You just deleted the book, '" + this.books[bookIndex].title +
         " by " + this.books[bookIndex].author +"("+this.books[bookIndex].year + ")'."; 
@@ -137,7 +137,7 @@ Library.prototype.deleteBook = function(id){
 //allows user to update book using the id
 Library.prototype.updateBook = function(id, updatedBook){
     let bookIndex = this.getBookIndex(id);
-    if (bookIndex == null || bookIndex == undefined) return 'Book cannot be updated';
+    if (isNaN(bookIndex)) return 'Book not found and thus cannot be updated';
     else {
         this.books[bookIndex] = updatedBook;
         this.updateLibrary(this.books);
